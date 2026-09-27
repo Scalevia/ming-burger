@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "title": "Ming Burger",
+    "description": "الموقع الرسمي لمطعم Ming Burger — قيد الإنشاء."
+  },
+  "landing": {
+    "heading": "Ming Burger",
+    "underConstruction": "الموقع قيد الإنشاء",
+    "otherLanguage": "English"
+  },
+  "languageSelect": {
+    "prompt": "اختر اللغة"
+  }
+}

@@ -1,0 +1,29 @@
+# Secrets & local environment — never commit
+.env
+.env.*
+!.env.example
+**/config/*.json
+!**/config/*.example.json
+
+# Node / web
+node_modules/
+apps/web/build/
+apps/web/.react-router/
+.vercel/
+*.tsbuildinfo
+coverage/
+
+# Supabase CLI local state
+supabase/.temp/
+supabase/.branches/
+
+# Dart / Flutter
+.dart_tool/
+**/build/
+pubspec_overrides.yaml
+
+# Editors / OS
+.idea/
+*.iml
+.DS_Store
+Thumbs.db

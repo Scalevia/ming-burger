@@ -1,0 +1,23 @@
+{
+  "name": "ming-burger",
+  "private": true,
+  "description": "Ming Burger restaurant operations platform (POS, Kitchen, Admin, Landing) on Supabase",
+  "packageManager": "pnpm@11.28.0",
+  "engines": {
+    "node": ">=22.22.0 <23"
+  },
+  "scripts": {
+    "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset",
+    "db:test": "supabase test db",
+    "db:lint": "supabase db lint --level warning --fail-on error",
+    "db:new": "supabase migration new",
+    "web:dev": "pnpm --filter @ming/web dev",
+    "web:build": "pnpm --filter @ming/web build",
+    "web:check": "pnpm --filter @ming/web check"
+  },
+  "devDependencies": {
+    "supabase": "2.118.0"
+  }
+}

@@ -1,0 +1,8 @@
+packages:
+  - apps/web
+
+# Only packages listed here may run install scripts (supply-chain hardening).
+# supabase: postinstall downloads the pinned Supabase CLI binary.
+onlyBuiltDependencies:
+  - supabase
+  - esbuild

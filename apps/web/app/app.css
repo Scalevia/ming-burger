@@ -1,0 +1,26 @@
+:root {
+  color-scheme: light;
+  font-family: system-ui, "Segoe UI", Tahoma, "Noto Sans Arabic", sans-serif;
+  line-height: 1.6;
+  color: #1c1917;
+  background: #fafaf9;
+}
+
+body {
+  margin: 0;
+}
+
+.page {
+  max-width: 48rem;
+  margin-inline: auto;
+  padding: 2rem 1rem;
+}
+
+.status {
+  color: #57534e;
+}
+
+.lang-links {
+  display: flex;
+  gap: 1rem;
+}

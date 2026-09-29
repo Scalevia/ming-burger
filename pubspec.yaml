@@ -1,0 +1,12 @@
+# Dart pub workspace root (Flutter apps + shared package). Single pubspec.lock for all members.
+# Run `flutter pub get` here, at the repository root.
+name: ming_workspace
+publish_to: none
+
+environment:
+  sdk: ^3.13.4
+
+workspace:
+  - apps/pos
+  - apps/kitchen
+  - packages/shared

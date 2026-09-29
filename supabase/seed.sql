@@ -1,0 +1,2 @@
+-- Local/dev seed data. Applied by `supabase db reset` only — never to production.
+-- Phase 1 has no business tables, so there is nothing to seed yet.

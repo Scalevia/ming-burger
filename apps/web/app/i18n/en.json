@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "title": "Ming Burger",
+    "description": "The official Ming Burger restaurant website — under construction."
+  },
+  "landing": {
+    "heading": "Ming Burger",
+    "underConstruction": "Website under construction",
+    "otherLanguage": "العربية"
+  },
+  "languageSelect": {
+    "prompt": "Choose your language"
+  }
+}

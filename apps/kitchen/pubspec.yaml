@@ -1,0 +1,23 @@
+name: ming_kitchen
+description: "Ming Burger Kitchen display app."
+publish_to: none
+version: 0.1.0+1
+resolution: workspace
+
+environment:
+  sdk: ^3.13.4
+  flutter: 3.47.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+  ming_shared:
+    path: ../../packages/shared
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: 6.0.0
+
+flutter:
+  uses-material-design: true

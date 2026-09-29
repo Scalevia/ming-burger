@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: gitleaks (full history)
+        run: docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.30.1 git /repo --redact --no-banner --verbose
+
+  database:
+    name: Database (migrations, pgTAP, lint, auth config)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Start local Supabase (applies all migrations from scratch)
+        run: pnpm exec supabase start -x studio,postgres-meta,imgproxy,vector,logflare,edge-runtime,supavisor,mailpit
+      - name: pgTAP tests
+        run: pnpm db:test
+      - name: Database lint
+        run: pnpm db:lint
+      - name: Public signup is rejected
+        run: node supabase/tests/auth/signup-disabled.mjs
+
+  web:
+    name: Web (typecheck, lint, test, build, verify)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      VITE_APP_ENV: preview
+      VITE_SITE_URL: https://ming-burger.invalid
+      VITE_SUPABASE_URL: https://ci-placeholder.supabase.co
+      VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci_placeholder
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @ming/web check
+      - run: pnpm --filter @ming/web build
+      - run: pnpm --filter @ming/web verify:build
+
+  flutter:
+    name: Flutter (analyze, test, Android debug build)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version: 3.47.5
+          channel: stable
+          cache: true
+      - run: flutter --version
+      - run: flutter pub get --enforce-lockfile
+      - run: flutter analyze
+      - run: flutter test
+        working-directory: packages/shared
+      - run: flutter test
+        working-directory: apps/pos
+      - run: flutter test
+        working-directory: apps/kitchen
+      - name: Android debug build (development target only — production hardware not decided)
+        run: |
+          (cd apps/pos && flutter build apk --debug)
+          (cd apps/kitchen && flutter build apk --debug)

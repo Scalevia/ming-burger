@@ -44,6 +44,9 @@
 - `auto_expose_new_tables = false` could make local and hosted grants differ for `service_role`
   → migration now states `service_role` default grants explicitly.
 - Android: release builds lacked the `INTERNET` permission; backups disabled for secure storage.
+- Local Android builds failed on Windows: Kotlin incremental caches cannot span drives (project on
+  `D:`, pub cache on `C:`). Fixed with `kotlin.incremental=false`; Gradle heap lowered from 8 GB to
+  4 GB so builds fit on 8 GB machines running Docker.
 
 ## 4. Deferred to later phases (by design)
 
